@@ -25,9 +25,14 @@ ROM = {
         },  
         {
             "startAddr" : 0x3000, "endAddr" : 0x37ff
-        },
-        {
-            "startAddr" : 0x3800, "endAddr" : 0x3fff
         }
-    ]            
+    ],
+"ROM_Debug":
+    {
+        "startAddr" : 0x3800, "endAddr" : 0x3fff
+    },    
+"RAM" :
+    {
+        "startAddr" : 0x4000, "endAddr" : 0x5fff
+    }
 }
