@@ -122,24 +122,25 @@ class CallStack():
         self.isr = False
 
     def push(self, tsc, call, isr = None):
-        self._isr(isr)
-        from_func = self.stack_ptr[-1] if self.stack_ptr else (0, "ERROR")
+        from_func = self.stack_ptr[-1] if self.stack_ptr else "Unknown"
         to_func = label(call)
-        self.stack_ptr.append((tsc, to_func))
-        return  f"\nCall {to_func} | {from_func[1]} -> Stack"
+        self.stack_ptr.append(to_func)
+        self._isr(isr)
+        self.add_event(tsc, to_func, "B")
+        return  f"\nCall {to_func} | {from_func} -> Stack"
 
     def pop(self, tsc, call, isr = None):
-        from_func = self.stack_ptr.pop() if self.stack_ptr else (0, "ERROR")
-        to_func = self.stack_ptr[-1] if self.stack_ptr else "ERROR"
-        line = f"\nReturn from {from_func[1]} | Stack -> {to_func[1]}"
-        self.add_event(from_func[0], from_func[1], "B")
-        self.add_event(tsc, from_func[1], "E")
+        from_func = self.stack_ptr.pop() if self.stack_ptr else "Unknown"
+        to_func = self.stack_ptr[-1] if self.stack_ptr else "Unknown"
+        line = f"\nReturn from {from_func} | Stack -> {to_func}"        
+        self.add_event(tsc, from_func, "E")
         self._isr(isr)
         return line
 
     def _isr(self, isr):
-        if isr:
-            self.isr = isr
+        if isr is None:
+            return
+        self.isr = isr
 
     def add_event(self, ts, name, phase, pid = None):
         event = {}
@@ -256,10 +257,22 @@ def print_isr(tsc, addr, data):
     int_ret_s = f"{data[-4]}{data[-3]}"
     int_addr_s = f"{data[-1]}{data[-2]}"
     int_addr_ptr_s = f"{addr[-2]:02X}"
-    line = f"\nISR_VECT({int_vect:02X})! {data}, \
+    line = f"\nISR_VECT({int_vect:02X})! {addr}, {data}, \
                 {int_ret_s}, *({int_addr_ptr_s}) ->{int_addr_s}\n"
     line += print_call(tsc, f"ISR {int_addr_s}", int(int_addr_s, 16), int_vect)
     return line
+
+def check_isr(addr, op_num):
+    value = 1
+    reg = addr[0]
+    for item in addr[1:]:
+        if item == reg + 1:
+            value += 1
+            reg = item
+        else:
+            break
+    return True if (len(addr) - op_num - value) > 3 else False
+    
 
 def print_insn(tsc, value):
     insn = value.get("insn")
@@ -270,12 +283,13 @@ def print_insn(tsc, value):
     pan = 10 - len(tsc_s)
     if not addr:
         return "decode fail"
+    op_num = count_op(op)
     line = f"{tsc}:{' '*pan}{addr[0]:04X} "
-    datalen = len(addr) - count_op(op)
+    datalen = len(addr) - op_num
     interrupt = False
     if addr and data and len(addr) == len(data):
-        data_count = len(data) - count_op(op)
-        if data_count > 4:
+        data_count = len(data) - op_num
+        if data_count > 4 and check_isr(addr, op_num):
             #we have 5 bytes of data for interrupt:
             data_count = data_count - 5
             interrupt = True
@@ -286,7 +300,7 @@ def print_insn(tsc, value):
         line += f"{' ' * (25-len(insn))}"
         line += print_op(tsc, insn, addr[datalen:], op)
         if interrupt:
-            assert(data_count >= 0), f"{tsc}: {data_count}, {data}"
+            assert(data_count >= 0), f"{tsc}: {data_count}, {value}"
             line += print_isr(tsc, addr, data)
     return line
 
