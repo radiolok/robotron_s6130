@@ -85,8 +85,8 @@ ROM:0018                                                  ; sub_F0B+A↓p ...
 ROM:0018 C3 C2 10                 jp      KeyboardReadColumn ; KeyboardReadColumn Arguments:
 ROM:0018                                                  ; A - if < 10h is 0000xxxx read mask
 ROM:0018                                                  ; else - A[7:6]: (0x)- ColumnDataB, (10) - ColumnDataA, 11-RowDataB
-ROM:0018                                                  ;         A[5:3] - bit index for...
-ROM:0018                                                  ;         A[2:0] - bit index for...
+ROM:0018                                                  ;         A[5:3] - bit index for read
+ROM:0018                                                  ;         A[2:0] - bit index for write
 ROM:0018                                                  ; Return: A - Value from port, Z flag if A is empty
 ROM:0018
 ROM:0018          ; End of function j_KeyboardReadColumn
@@ -341,33 +341,36 @@ ROM:00DE 1D                       db  1Dh
 ROM:00DF 67                       db  67h ; g
 ROM:00E0 88                       db  88h                 ; Copied to 41B0
 ROM:00E0                                                  ; Start
+ROM:00E0                                                  ; Row_A 01 Col_A 02: Pressure
 ROM:00E1 4A                       db  4Ah ; J
 ROM:00E2 18                       db  18h
-ROM:00E3 89                       db  89h
+ROM:00E3 89                       db  89h                 ; Row_A 02 Col A 02: Scripture
 ROM:00E4 6F                       db  6Fh ; o
 ROM:00E5 18                       db  18h
-ROM:00E6 90                       db  90h
+ROM:00E6 90                       db  90h                 ; Row A 01 Col A 04: Ribbon
 ROM:00E7 8D                       db  8Dh
 ROM:00E8 18                       db  18h
-ROM:00E9 8B                       db  8Bh
+ROM:00E9 8B                       db  8Bh                 ; Row_A 08 Col A 02: Blocksatz
 ROM:00EA F1                       db 0F1h
 ROM:00EB 18                       db  18h
-ROM:00EC 00                       db    0
+ROM:00EC 8C                       db  8Ch                 ; Row 4, Col 1: Uart Receive button
 ROM:00ED E6                       db 0E6h
 ROM:00EE 18                       db  18h
-ROM:00EF 00                       db    0
+ROM:00EF 9D                       db  9Dh                 ; Row 5 Col 3: Uart Send button
 ROM:00F0 C8                       db 0C8h
 ROM:00F1 18                       db  18h
-ROM:00F2 00                       db    0
+ROM:00F2 00                       db    0                 ; Language
 ROM:00F3 A4                       db 0A4h
 ROM:00F4 18                       db  18h                 ; Finish
-ROM:00F5 BC       MOD_menu:       db 0BCh                 ; Pressure energy symbol
+ROM:00F5 BC       MOD_menu:       db 0BCh                 ; Copied to 419D
+ROM:00F5                                                  ; Pressure energy symbol
 ROM:00F6 03                       db    3                 ; Scripture position symbol
 ROM:00F7 B8                       db 0B8h                 ; Ribbon cassette
 ROM:00F8 88                       db  88h                 ; Blocksatz
 ROM:00F9 BB                       db 0BBh                 ; Receive interface
 ROM:00FA BA                       db 0BAh                 ; Send interface
 ROM:00FB 94                       db  94h                 ; Language Switching
+ROM:00FB                                                  ; End
 ROM:00FC 44                       db  44h ; D
 ROM:00FD 48                       db  48h ; H
 ROM:00FE 4C                       db  4Ch ; L
@@ -4413,8 +4416,8 @@ ROM:10C2
 ROM:10C2          ; KeyboardReadColumn Arguments:
 ROM:10C2          ; A - if < 10h is 0000xxxx read mask
 ROM:10C2          ; else - A[7:6]: (0x)- ColumnDataB, (10) - ColumnDataA, 11-RowDataB
-ROM:10C2          ;         A[5:3] - bit index for...
-ROM:10C2          ;         A[2:0] - bit index for...
+ROM:10C2          ;         A[5:3] - bit index for read
+ROM:10C2          ;         A[2:0] - bit index for write
 ROM:10C2          ; Return: A - Value from port, Z flag if A is empty
 ROM:10C2
 ROM:10C2          KeyboardReadColumn:                     ; CODE XREF: j_KeyboardReadColumn↑j
