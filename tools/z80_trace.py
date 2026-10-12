@@ -34,7 +34,7 @@ io_addr = {
 }
 
 # Elema (PELK-3110, KR580VM80A). Port assignment is reconstructed from the
-# firmware and the schematic (docs/elema/schematic.md), not verified on hardware.
+# firmware and the schematic (elema/hw/README.md), not verified on hardware.
 elema_io_addr = {
         0xE0 : "PIT1_Ch0           ",
         0xE1 : "PIT1_Ch1           ",

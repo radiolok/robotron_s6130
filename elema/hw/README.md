@@ -6,12 +6,12 @@
 
 | Лист | Склеенный файл | Фрагменты | Содержимое |
 |---|---|---|---|
-| 1 | [`doc/elema/elema_sheet1.png`](../../doc/elema/elema_sheet1.png) | `doc/elema/scans/part1_*.jpg`, `part2_*.jpg` | Схема соединений блоков, перечень, плата индикации, блок питания, клавиатура |
-| 2 | [`doc/elema/elema_sheet2.png`](../../doc/elema/elema_sheet2.png) | `doc/elema/scans/part3_*.jpg` | Плата управления (процессорная), плата ключей управления, плата блока печати, плата оптодатчика |
+| 1 | [`elema_sheet1.png`](elema_sheet1.png) | `scans/part1_*.jpg`, `part2_*.jpg` | Схема соединений блоков, перечень, плата индикации, блок питания, клавиатура |
+| 2 | [`elema_sheet2.png`](elema_sheet2.png) | `scans/part3_*.jpg` | Плата управления (процессорная), плата ключей управления, плата блока печати, плата оптодатчика |
 
 ```sh
 # Пересобрать листы из фрагментов
-cd doc/elema
+cd elema/hw
 python3 ../../tools/stitch_scans.py -o elema_sheet1.png --ref 2 scans/part1_*.jpg scans/part2_*.jpg
 python3 ../../tools/stitch_scans.py -o elema_sheet2.png --ref 2 --rotate 180 scans/part3_*.jpg
 ```
