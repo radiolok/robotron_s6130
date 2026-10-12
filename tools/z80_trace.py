@@ -34,24 +34,24 @@ io_addr = {
 }
 
 # Elema (PELK-3110, KR580VM80A). Port assignment is reconstructed from the
-# firmware init code (see docs/elema/README.md) and is not verified on hardware.
+# firmware and the schematic (docs/elema/schematic.md), not verified on hardware.
 elema_io_addr = {
         0xE0 : "PIT1_Ch0           ",
         0xE1 : "PIT1_Ch1           ",
         0xE2 : "PIT1_Ch2           ",
         0xE3 : "PIT1_Ctrl          ",
-        0xE4 : "PIT2_Ch0_Hammer    ",
-        0xE5 : "PIT2_Ch1           ",
+        0xE4 : "PIT2_Ch0_Beep      ",
+        0xE5 : "PIT2_Ch1_UART_Clk  ",
         0xE6 : "PIT2_Ch2           ",
         0xE7 : "PIT2_Ctrl          ",
         0xE8 : "Keyboard_Data      ",
-        0xEC : "PPI1_A_Latch_Data  ",
-        0xED : "PPI1_B_Strobes     ",
+        0xEC : "PPI1_A_LED_Data    ",
+        0xED : "PPI1_B_Strobe_Beep ",
         0xEE : "PPI1_C             ",
         0xEF : "PPI1_Ctrl          ",
         0xF0 : "PPI2_A_Stepper_A   ",
         0xF1 : "PPI2_B_Stepper_B   ",
-        0xF2 : "PPI2_C_Motor_En    ",
+        0xF2 : "PPI2_C_Motor_Mode  ",
         0xF3 : "PPI2_Ctrl          ",
         0xF4 : "USART_Data         ",
         0xF5 : "USART_Ctrl         ",
