@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+# Outputs of tools/z80_trace.py
+*.out
+# PulseView/sigrok captures
+*.sr
