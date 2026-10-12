@@ -14,6 +14,7 @@ def putpixel(im, x, y, pixel, scale = SCALE):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--rom', type=str)
+    parser.add_argument('-o', '--out', type=str, default='sqr.png')
     args = parser.parse_args()
 
     blackPixel = 0 #(0,0,0)
@@ -43,6 +44,6 @@ if __name__ == '__main__':
                     print(x, y, pixel)
                 i_row += 1
             symbol += 1
-        im.save('sqr.png')
+        im.save(args.out)
         
         
